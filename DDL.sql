@@ -2,9 +2,9 @@ CREATE OR REPLACE TABLE Customers (
     customerID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     first_name VARCHAR(32) NOT NULL,
     last_name VARCHAR(32) NOT NULL,
-    email VARCHAR(32) NOT NULL,
+    email VARCHAR(50) NOT NULL,
     password VARCHAR(32) NOT NULL,  
-    phone_num VARCHAR(32)
+    phone_number VARCHAR(12)
 );
 
 INSERT INTO Customers (first_name, last_name, email, password, phone_num) VALUES
