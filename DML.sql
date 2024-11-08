@@ -64,6 +64,8 @@ select first_name, last_name from Customer_Seller_Relationships
     inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
     where Sellers.store_name = :store_selected_from_CRMSelection;
 
+-- get a single CSR data for the Edit Seller Profile form
+
 -- update store's CRM by updating 
 update Customer_Seller_Relationships set
     email_opt_out = :email_opt_out_input
