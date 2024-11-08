@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Line Item</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Edit Line Item</h1>
+    </header>
+
+    <main>
+        <form action="/updateLineItem" method="post">
+            <label for="lineitemID">Line Item ID:</label>
+            <input type="text" id="lineitemID" name="lineitemID" readonly value="1">
+
+            <label for="orderID">Order ID:</label>
+            <input type="text" id="orderID" name="orderID" value="1">
+
+            <label for="productID">Product ID:</label>
+            <input type="text" id="productID" name="productID" value="1">
+
+            <label for="sell_price">Sell Price:</label>
+            <input type="text" id="sell_price" name="sell_price" value="119.99">
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" value="2">
+
+            <button type="submit">Update Line Item</button>
+        </form>
+    </main>
+</body>
+</html>
