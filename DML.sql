@@ -64,9 +64,8 @@ select first_name, last_name from Customer_Seller_Relationships
     inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
     where Sellers.store_name = :store_selected_from_CRMSelection;
 
--- update CRM
+-- update store's CRM by updating 
 update Customer_Seller_Relationships set
-    follows_store = :follows_store_input,
     email_opt_out = :email_opt_out_input
 where csrID = (
     select csrID from Customer_Seller_Relationships 
@@ -74,7 +73,14 @@ where csrID = (
     inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
     where Sellers.store_name = :store_selected_from_CRMSelection and Customers.customerID = :customerID_selected_from_CRM);
 
-
+-- delete customer tracking from store's CRM 
+delete from Customer_Seller_Relationships 
+where csrID = (
+    select csrID from Customer_Seller_Relationships 
+    inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
+    inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
+    where Sellers.store_name = :store_selected_from_CRMSelection and Customers.customerID = :customerID_selected_from_CRM
+);
 
 
 --  ***** ***** ***** ***** ***** ORDERS PAGES ***** ***** ***** ***** *****

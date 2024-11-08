@@ -48,6 +48,7 @@ CREATE OR REPLACE TABLE Customer_Seller_Relationships (
     csrID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     customerID INT NOT NULL,
     sellerID INT NOT NULL,
+    email_opt_out BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID),
     FOREIGN KEY (sellerID) REFERENCES Sellers(sellerID)
 );
