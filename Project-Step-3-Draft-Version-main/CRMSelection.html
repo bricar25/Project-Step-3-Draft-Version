@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>select a store to view store's CRM</h1>
+        <a href="index.html" class="back-button">Back to Main</a>
+    </header>
+
+    <main>
+        <select id="storeCRM-select">
+            <option value="">--Please choose an option--</option>
+            <option value="store1_CRM.html">Winner Tech Shop</option>
+            <option value="store1_CRM.html">Wimber Wear</option>
+            <option value="store1_CRM.html">Crate and Home</option>
+            <option value="store1_CRM.html">Son Shades</option>
+        </select>
+        <button onclick="redirectToStore()">Go to CRM</button>
+    </main>
+
+    <script>
+        function redirectToStore() {
+            const storeSelect = document.getElementById('storeCRM-select');
+            const selectedStore = storeSelect.value;
+            if (selectedStore) {
+                window.location.href = selectedStore;
+            } else {
+                alert('Please select a store to continue.');
+            }
+        }
+    </script>
+</body>
+</html>
