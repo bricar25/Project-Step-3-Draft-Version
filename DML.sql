@@ -86,7 +86,74 @@ where csrID = (
 
 
 --  ***** ***** ***** ***** ***** ORDERS PAGES ***** ***** ***** ***** *****
+-- get a list of orders for the orders main page
+select orderID, customerID, order_date, shipped, total from Orders;
 
+-- get a single order's data for the Edit Order page
+select orderID, customerID, order_date, shipped, total from Orders
+where orderID = :orderID_selected_from_orders_page;
 
+-- update order information
+update Orders set
+    customerID = :customerID_input,
+    order_date = :order_date_input,
+    shipped    = :shipped_input,
+    total      = :total_input
+where orderID = :orderID_selected_from_orders_page;
+
+-- add a new order
+insert into Orders (customerID, order_date, shipped, total)
+values (:customerID_input, :order_date_input, :shipped_input, :total_input);
+
+-- delete an order
+delete from Orders where orderID = :orderID_selected_from_orders_page;
 
 --  ***** ***** ***** ***** ***** PRODUCTS PAGES ***** ***** ***** ***** *****
+-- get a list of products for the products main page
+select productID, sellerID, category, brand, size, price, product_condition, color from Products;
+
+-- get a single product's data for the Edit Product page
+select productID, sellerID, category, brand, size, price, product_condition, color from Products
+where productID = :productID_selected_from_products_page;
+
+-- update product information
+update Products set
+    sellerID          = :sellerID_input,
+    category          = :category_input,
+    brand             = :brand_input,
+    size              = :size_input,
+    price             = :price_input,
+    product_condition = :product_condition_input,
+    color             = :color_input
+where productID = :productID_selected_from_products_page;
+
+-- add a new product
+insert into Products (sellerID, category, brand, size, price, product_condition, color)
+values (:sellerID_input, :category_input, :brand_input, :size_input, :price_input, :product_condition_input, :color_input);
+
+-- delete a product
+delete from Products where productID = :productID_selected_from_products_page;
+
+--  ***** ***** ***** ***** ***** LINE ITEMS PAGES ***** ***** ***** ***** *****
+-- get a list of line items for a specific order on the line items page
+select lineitemID, orderID, productID, sell_price, qty from Line_Items
+where orderID = :orderID_selected_from_orders_page;
+
+-- get a single line item data for editing
+select lineitemID, orderID, productID, sell_price, qty from Line_Items
+where lineitemID = :lineitemID_selected_from_line_items;
+
+-- update line item information
+update Line_Items set
+    orderID    = :orderID_input,
+    productID  = :productID_input,
+    sell_price = :sell_price_input,
+    qty        = :qty_input
+where lineitemID = :lineitemID_selected_from_line_items;
+
+-- add a new line item
+insert into Line_Items (orderID, productID, sell_price, qty)
+values (:orderID_input, :productID_input, :sell_price_input, :qty_input);
+
+-- delete a line item
+delete from Line_Items where lineitemID = :lineitemID_selected_from_line_items;
