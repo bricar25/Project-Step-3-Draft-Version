@@ -109,6 +109,33 @@
                 </td>
             </tr>
         </table>
+
+                <h2>Add New Product</h2>
+        <form action="/addProduct" method="post">
+            <label for="seller_id">Seller ID:</label>
+            <input type="text" id="seller_id" name="seller_id" required>
+        
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" required>
+        
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" required>
+        
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size" required>
+        
+            <label for="price">Price:</label>
+            <input type="text" id="price" name="price" required>
+        
+            <label for="condition">Condition:</label>
+            <input type="text" id="condition" name="condition" required>
+        
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" required>
+        
+            <button type="submit">Add Product</button>
+        </form>
+
     </main>
 </body>
 </html>
