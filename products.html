@@ -16,7 +16,7 @@
     <main>
         <p>This table displays details for each product available for sale:</p>
 
-        <table>
+        <table id="productTable">
             <tr>
                 <th>Product ID</th>
                 <th>Seller ID</th>
@@ -68,74 +68,28 @@
                     <a href="#delete">Delete</a>
                 </td>
             </tr>
+            <!-- Add New Product Row -->
             <tr>
-                <td>3</td>
-                <td>3</td>
-                <td>Pants</td>
-                <td>Arizona</td>
+                <td>New</td>
+                <td><input type="text" name="seller_id" placeholder="Seller ID"></td>
+                <td><input type="text" name="category" placeholder="Category"></td>
+                <td><input type="text" name="brand" placeholder="Brand"></td>
                 <td>
-                    <select name="size" id="size">
+                    <select name="size" id="new_size">
                         <option value="Small">Small</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large" selected>Large</option>
-                    </select>
-                </td>
-                <td>$19.99</td>
-                <td>Used</td>
-                <td>White</td>
-                <td class="actions">
-                    <a href="editproducts.html">Edit</a>
-                    <a href="#delete">Delete</a>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>4</td>
-                <td>Accessories</td>
-                <td>Eddie Bauer</td>
-                <td>
-                    <select name="size" id="size">
-                        <option value="Small" selected>Small</option>
                         <option value="Medium">Medium</option>
                         <option value="Large">Large</option>
                     </select>
                 </td>
-                <td>$15.99</td>
-                <td>Used</td>
-                <td>Blue</td>
+                <td><input type="text" name="price" placeholder="Price"></td>
+                <td><input type="text" name="condition" placeholder="Condition"></td>
+                <td><input type="text" name="color" placeholder="Color"></td>
                 <td class="actions">
-                    <a href="editproducts.html">Edit</a>
-                    <a href="#delete">Delete</a>
+                    <button type="button" disabled>Add</button>
                 </td>
             </tr>
         </table>
-
-                <h2>Add New Product</h2>
-        <form action="/addProduct" method="post">
-            <label for="seller_id">Seller ID:</label>
-            <input type="text" id="seller_id" name="seller_id" required>
-        
-            <label for="category">Category:</label>
-            <input type="text" id="category" name="category" required>
-        
-            <label for="brand">Brand:</label>
-            <input type="text" id="brand" name="brand" required>
-        
-            <label for="size">Size:</label>
-            <input type="text" id="size" name="size" required>
-        
-            <label for="price">Price:</label>
-            <input type="text" id="price" name="price" required>
-        
-            <label for="condition">Condition:</label>
-            <input type="text" id="condition" name="condition" required>
-        
-            <label for="color">Color:</label>
-            <input type="text" id="color" name="color" required>
-        
-            <button type="submit">Add Product</button>
-        </form>
-
     </main>
 </body>
 </html>
+
