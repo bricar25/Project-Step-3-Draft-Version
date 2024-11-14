@@ -11,8 +11,11 @@
         <h1>Edit Product</h1>
     </header>
 
+    <!-- Back to Main Button -->
+    <button class="back-button" onclick="window.location.href='index.html';">Back To Main</button>
+
     <main>
-        <form action="/updateProduct" method="post">
+        <form>
             <label for="productID">Product ID:</label>
             <input type="text" id="productID" name="productID" readonly value="1">
 
@@ -44,7 +47,8 @@
             <label for="color">Color:</label>
             <input type="text" id="color" name="color" value="Black">
 
-            <button type="submit">Update Product</button>
+            <!-- Non-functional Update Product Button -->
+            <button type="button">Update Product</button>
             <button type="button" class="cancel" onclick="window.history.back();">Cancel</button>
         </form>
 
@@ -94,4 +98,5 @@
     </main>
 </body>
 </html>
+
 
