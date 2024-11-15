@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Customer to CRM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Add Customer to CRM</h1>
+        <a href="store1_CRM.html" class="back-button">Back to CRM</a>
+    </header>
+
+    <main>
+        <form action="searchResults.html" method="get">
+            <p>Search for a customer. First and last name are required fields. CustomerID is optional:</p>
+
+            <label for="customer_id">Customer ID</label>
+            <input type="text" id="customer_id" name="customer_id" placeholder="Enter Customer ID">
+
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Enter First Name" required>
+
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Enter Last Name" required>
+
+            <button type="submit">Search</button>
+            <button type="button" class="cancel" onclick="window.location.href='store1_CRM.html'"">Cancel</button>
+        </form>
+    </main>
+</body>
+</html>

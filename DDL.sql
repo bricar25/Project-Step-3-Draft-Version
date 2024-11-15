@@ -30,7 +30,7 @@ CREATE OR REPLACE TABLE Products (
     price DECIMAL(6,2) NOT NULL,
     product_condition VARCHAR(32) NOT NULL,
     color VARCHAR(32),
-    FOREIGN KEY (sellerID) REFERENCES Sellers(sellerID)
+    FOREIGN KEY (sellerID) REFERENCES Sellers(sellerID) ON DELETE CASCADE
 );
 
 -- create Orders table
@@ -40,7 +40,7 @@ CREATE OR REPLACE TABLE Orders (
     order_date DATE NOT NULL,
     shipped BOOLEAN DEFAULT FALSE,
     total DECIMAL(6,2) NOT NULL,
-    FOREIGN KEY (customerID) REFERENCES Customers(customerID)
+    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
 
 -- create Customer_Seller_Relationships table. intersection table between Customers and Sellers
@@ -49,8 +49,8 @@ CREATE OR REPLACE TABLE Customer_Seller_Relationships (
     customerID INT NOT NULL,
     sellerID INT NOT NULL,
     email_opt_out BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (customerID) REFERENCES Customers(customerID),
-    FOREIGN KEY (sellerID) REFERENCES Sellers(sellerID)
+    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE,
+    FOREIGN KEY (sellerID) REFERENCES Sellers(sellerID) ON DELETE CASCADE
 );
 
 -- create Line_Items table. intersection table between Orders and Products
@@ -61,9 +61,10 @@ CREATE OR REPLACE TABLE Line_Items (
     sell_price DECIMAL(6,2) NOT NULL,
     qty INT NOT NULL,
     UNIQUE (orderID, productID),  
-    FOREIGN KEY (orderID) REFERENCES Orders(orderID),
-    FOREIGN KEY (productID) REFERENCES Products(productID)
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE,
+    FOREIGN KEY (productID) REFERENCES Products(productID) ON DELETE CASCADE
 );
+
 
 -- insert sample data into Customers table
 INSERT INTO Customers (first_name, last_name, email, password, phone_number) VALUES
