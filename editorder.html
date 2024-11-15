@@ -11,8 +11,11 @@
         <h1>Edit Order Listing</h1>
     </header>
 
+    <!-- Back to Main Button -->
+    <button class="back-button" onclick="window.location.href='index.html';">Back To Main</button>
+
     <main>
-        <form action="/updateOrder" method="post">
+        <form>
             <label for="orderID">Order ID:</label>
             <input type="text" id="orderID" name="orderID" readonly value="1">
 
@@ -31,8 +34,10 @@
             <label for="total">Total:</label>
             <input type="text" id="total" name="total" value="259.18">
 
-            <button type="submit">Update Order</button>
+            <!-- Non-functional Update Order Button -->
+            <button type="button">Update Order</button>
         </form>
     </main>
 </body>
 </html>
+
