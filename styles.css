@@ -95,3 +95,23 @@ button:hover {
 .cancel:hover {
     background-color: #e31b0c;
 }
+/* Center the container holding the button */
+.add-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.add-button:hover {
+    background-color: #45a049;
+}
