@@ -11,8 +11,11 @@
         <h1>Edit Line Item</h1>
     </header>
 
+    <!-- Back to Main Button -->
+    <button class="back-button" onclick="window.location.href='index.html';">Back To Main</button>
+
     <main>
-        <form action="/updateLineItem" method="post">
+        <form>
             <label for="lineitemID">Line Item ID:</label>
             <input type="text" id="lineitemID" name="lineitemID" readonly value="1">
 
@@ -28,8 +31,10 @@
             <label for="quantity">Quantity:</label>
             <input type="number" id="quantity" name="quantity" value="2">
 
-            <button type="submit">Update Line Item</button>
+            <!-- Non-functional Update Line Item Button -->
+            <button type="button">Update Line Item</button>
         </form>
     </main>
 </body>
 </html>
+
