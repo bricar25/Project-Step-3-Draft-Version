@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers Table</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Customer Profiles</h1>
+        <a href="index.html" class="back-button">Back to Main</a>
+    </header>
+
+    <main>
+        <p>This table displays all customer profiles</p>
+
+        <table>
+            {% if data %}
+            <tr>
+                <!--iterate through each key in data[0] to get the column name-->
+                {% for key in data[0].keys() %}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">
+                        {{key}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Jamie</td>
+                <td>Dillan</td>
+                <td>jdill@yahoo.com</td>
+                <td>123pasS!</td>
+                <td>223-505-1234</td>
+                <td class="actions">
+                    <a href="editCustomer.html">Edit</a>
+                    <a href="#delete">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane</td>
+                <td>Smith</td>
+                <td>janesmith@yahoo.com</td>
+                <td>Pass!word2</td>
+                <td>425-505-6678</td>
+                <td class="actions">
+                    <a href="editCustomer.html">Edit</a>
+                    <a href="#delete">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Alice</td>
+                <td>James</td>
+                <td>alicej@gmail.com</td>
+                <td>2p0a2s4s?</td>
+                <td>334-758-8765</td>
+                <td class="actions">
+                    <a href="editCustomer.html">Edit</a>
+                    <a href="#delete">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Bobby</td>
+                <td>Wilde</td>
+                <td>bwilde@gmail.com</td>
+                <td>beWure!</td>
+                <td>202-577-4321</td>
+                <td class="actions">
+                    <a href="editCustomer.html">Edit</a>
+                    <a href="#delete">Delete</a>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Add Customer Profile Button matching the styles of other pages -->
+        <button class="add-button" onclick="window.location.href='addCustomer.html';">Add New Customer Profile</button>
+    </main>
+
+</body>
+</html>
