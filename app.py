@@ -16,7 +16,7 @@ mysql = MySQL(app)
 
 @app.route("/")
 def home():
-    return render_template("index2.html")
+    return render_template("main.html")
 
 # route for customer's page
 # ***** CUSTOMER'S C[R]UD *****
