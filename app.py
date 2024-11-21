@@ -147,6 +147,15 @@ def editSeller():
 def addSeller():
     return render_template("addSeller.html")
 
+# PRODUCT LISTINGS PAGES
+@app.route("/products")
+def products():
+    return render_template("products.html")
+
+@app.route("/editProducts")
+def editProducts():
+    return render_template("editproducts.html")
+
 
 # Listener
 if __name__ == "__main__":

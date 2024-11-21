@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
@@ -12,7 +12,8 @@
     </header>
 
     <!-- Back to Main Button -->
-    <button class="back-button" onclick="window.location.href='index.html';">Back To Main</button>
+    <button class="back-button" onclick="window.location.href='/';">Back To Main</button>
+    <button class="back-button" onclick="window.location.href='/products';">Back To Products List</button>
 
     <main>
         <form>
@@ -48,7 +49,7 @@
             <input type="text" id="color" name="color" value="Black">
 
             <!-- Update Product Button linking back to products.html -->
-            <button type="button" onclick="window.location.href='products.html';">Update Product</button>
+            <button type="button" onclick="window.location.href='/products';">Update Product</button>
             <button type="button" class="cancel" onclick="window.history.back();">Cancel</button>
         </form>
 
