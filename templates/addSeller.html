@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Seller Profile</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
@@ -12,7 +12,7 @@
     </header>
 
     <main>
-        <form action="sellers.html" method="post">
+        <form action="/sellers">
             <label for="seller_id">Seller ID</label>
             <input type="text" id="seller_id" name="seller_id" placeholder="Auto-generated" readonly>
 
@@ -32,7 +32,7 @@
             <input type="number" id="follower_count" name="follower_count" required>
 
             <button type="submit">Add Profile</button>
-            <button type="button" class="cancel" onclick="window.location.href='sellers.html';">Cancel</button>
+            <button type="button" class="cancel" onclick="window.location.href='/sellers';">Cancel</button>
         </form>
     </main>
 </body>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Seller</title>
-    <link rel = "stylesheet" href = "styles.css">
+    <link rel = "stylesheet" href = "/static/style.css">
 
 </head>
 <body>
@@ -13,7 +13,7 @@
     </header>
 
     <main>
-        <form onsubmit="event.preventDefault(); window.location.href='sellers.html';">
+        <form onsubmit="event.preventDefault(); window.location.href='/sellers';">
             <label for="seller_id">Seller ID</label>
             <input type="text" id="seller_id" name="seller_id" value="1" readonly>
 
@@ -33,7 +33,7 @@
             <input type="number" id="follower_count" name="follower_count" value="1023" required>
 
             <button type="submit">Save Changes</button>
-            <button type="button" class="cancel" onclick="window.location.href='sellers.html';">Cancel</button>
+            <button type="button" class="cancel" onclick="window.location.href='/sellers';">Cancel</button>
         </form>
     </main>
 

@@ -18,7 +18,26 @@ mysql = MySQL(app)
 def home():
     return render_template("main.html")
 
-# route for customer's page
+# Customer Seller Relationships Pages
+# To-Do: CRUD not implemented; only proof of concept
+@app.route("/CRMSelection")
+def CRMSelection():
+    return render_template("CRMSelection.html")
+
+@app.route("/storeCRM")
+def storeCRM():
+    return render_template("store1_CRM.html")
+
+@app.route("/editEmailOptOut")
+def editStoreCRM():
+    return render_template("editCSR.html")
+
+@app.route("/addCustomerToCRM")
+def addCustomerToCRM():
+    return render_template("addCustomerToCRM.html")
+
+
+# Customer Pages
 # ***** CUSTOMER'S C[R]UD *****
 @app.route("/customers", methods=["POST", "GET"])
 def customers():
@@ -105,7 +124,7 @@ def addCustomer():
             return redirect("/customers")
 
 # delete customer
-# # ***** CUSTOMER'S CRU[D] *****
+# ***** CUSTOMER'S CRU[D] *****
 @app.route("/deleteCustomer/<int:id>")
 def deleteCustomer(id):
     query = "delete from Customers where customerID = %s;" %(id)
@@ -115,24 +134,19 @@ def deleteCustomer(id):
 
     return redirect("/customers")
 
+# SELLER PAGES
+@app.route("/sellers")
+def sellers():
+    return render_template("sellers.html")
 
-@app.route("/CRMSelection")
-def CRMSelection():
-    return render_template("CRMSelection.html")
+@app.route("/editSeller")
+def editSeller():
+    return render_template("editSeller.html")
 
+@app.route("/addSeller")
+def addSeller():
+    return render_template("addSeller.html")
 
-@app.route("/storeCRM")
-def storeCRM():
-    return render_template("store1_CRM.html")
-
-
-@app.route("/editEmailOptOut")
-def editStoreCRM():
-    return render_template("editCSR.html")
-
-@app.route("/addCustomerToCRM")
-def addCustomerToCRM():
-    return render_template("addCustomerToCRM.html")
 
 # Listener
 if __name__ == "__main__":
