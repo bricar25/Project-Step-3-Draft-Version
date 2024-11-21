@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Store</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
         <h1>select a store to view store's CRM</h1>
-        <a href="index.html" class="back-button">Back to Main</a>
+        <a href="/" class="back-button">Back to Main</a>
     </header>
 
     <main>
         <select id="storeCRM-select">
             <option value="">--Please choose an option--</option>
-            <option value="store1_CRM.html">Winner Tech Shop</option>
-            <option value="store1_CRM.html">Wimber Wear</option>
-            <option value="store1_CRM.html">Crate and Home</option>
-            <option value="store1_CRM.html">Son Shades</option>
+            <option value="/storeCRM">Winner Tech Shop</option>
+            <option value="/storeCRM">Wimber Wear</option>
+            <option value="/storeCRM">Crate and Home</option>
+            <option value="/storeCRM">Son Shades</option>
         </select>
         <button onclick="redirectToStore()">Go to CRM</button>
     </main>

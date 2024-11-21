@@ -116,6 +116,24 @@ def deleteCustomer(id):
     return redirect("/customers")
 
 
+@app.route("/CRMSelection")
+def CRMSelection():
+    return render_template("CRMSelection.html")
+
+
+@app.route("/storeCRM")
+def storeCRM():
+    return render_template("store1_CRM.html")
+
+
+@app.route("/editEmailOptOut")
+def editStoreCRM():
+    return render_template("editCSR.html")
+
+@app.route("/addCustomerToCRM")
+def addCustomerToCRM():
+    return render_template("addCustomerToCRM.html")
+
 # Listener
 if __name__ == "__main__":
     app.run(port=8011, debug=True)
