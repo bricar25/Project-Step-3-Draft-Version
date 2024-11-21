@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customer Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Edit Customer Profile</h1>
+    </header>
+
+    <main>
+        <form id="edit_customer" action = "/editCustomer/{{data[0].customerID}}" method = "POST">
+            <label for="id">Customer ID</label>
+            <input type="text" id="customerID" name="customerID" value="{{data[0].customerID}}" readonly>
+
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" value="{{data[0].first_name}}" required>
+
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{data[0].last_name}}" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{data[0].email}}" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" value="{{data[0].password}}" required>
+
+            <label for="phone_number">Phone Number</label>
+            <input type="text" id="phone_number" name="phone_number" value="{{data[0].phone_number}}" required>
+
+            <button type="submit" value="edit_customer" name="edit_customer">Save Changes</button>
+            <button type="button" class="cancel" onclick="window.location.href='/customers';">Cancel</button>
+        </form>
+    </main>
+
+
+</body>
+</html>

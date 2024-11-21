@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customers Table</title>
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
         <h1>Customer Profiles</h1>
-        <a href="index.html" class="back-button">Back to Main</a>
+        <a href="/" class="back-button">Back to Main</a>
     </header>
 
     <main>
@@ -32,7 +32,7 @@
                 <td>{{customer[key]}}</td>
                 {% endfor %}
                 <td class="actions">
-                    <a href="editCustomer.html">Edit</a>
+                    <a href="editCustomer/{{customer.customerID}}">Edit</a>
                     <a href="#delete">Delete</a>
                 </td>
             </tr>
