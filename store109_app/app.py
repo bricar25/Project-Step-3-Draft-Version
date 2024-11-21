@@ -19,6 +19,7 @@ def home():
     return render_template("index2.html")
 
 # route for customer's page
+# ***** CUSTOMER'S C[R]UD *****
 @app.route("/customers", methods=["POST", "GET"])
 def customers():
     if request.method == "GET":
@@ -35,6 +36,7 @@ def customers():
         return render_template("customers.j2", data = data)
 
 # route for editCustomer page
+# ***** CUSTOMER'S CR[U]D *****
 @app.route("/editCustomer/<int:id>", methods = ["POST", "GET"])
 def editCustomer(id):
     if request.method == "GET":
@@ -72,6 +74,8 @@ def editCustomer(id):
             # once edit is made, go to customers page
             return redirect("/customers")
 
+# addCustomer route
+# ***** CUSTOMER'S CR[U]D *****
 @app.route("/addCustomer", methods = ["POST", "GET"])
 def addCustomer():
     if request.method == "GET":
@@ -99,8 +103,16 @@ def addCustomer():
             # once edit is made, go to customers page
             return redirect("/customers")
 
+# delete customer
+# # ***** CUSTOMER'S CRU[D] *****
+@app.route("/deleteCustomer/<int:id>")
+def deleteCustomer(id):
+    query = "delete from Customers where customerID = %s;" %(id)
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
 
-
+    return redirect("/customers")
 
 
 # Listener
