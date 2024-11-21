@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Order Listing</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
@@ -12,7 +12,8 @@
     </header>
 
     <!-- Back to Main Button -->
-    <button class="back-button" onclick="window.location.href='index.html';">Back To Main</button>
+    <button class="back-button" onclick="window.location.href='/';">Back To Main</button>
+    <button class="back-button" onclick="window.location.href='/orders';">Back To Orders</button>
 
     <main>
         <form>
@@ -35,7 +36,7 @@
             <input type="text" id="total" name="total" value="259.18">
 
             <!-- Update Order Button linking back to orders.html -->
-            <button type="button" onclick="window.location.href='orders.html';">Update Order</button>
+            <button type="button" onclick="window.location.href='/orders';">Update Order</button>
         </form>
     </main>
 </body>

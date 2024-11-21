@@ -156,6 +156,15 @@ def products():
 def editProducts():
     return render_template("editproducts.html")
 
+# ORDERS PAGES
+@app.route("/orders")
+def orders():
+    return render_template("orders.html")
+
+@app.route("/editorder")
+def editorder():
+    return render_template("editorder.html")
+
 
 # Listener
 if __name__ == "__main__":
