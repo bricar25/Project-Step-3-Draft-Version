@@ -40,6 +40,7 @@ def customers():
 @app.route("/editCustomer/<int:id>", methods = ["POST", "GET"])
 def editCustomer(id):
     if request.method == "GET":
+        # get customer's data to set as default values in editCustomer page
         query = "select * from Customers where customerID = %s" %(id)
         cursor = mysql.connection.cursor()
         cursor.execute(query)
