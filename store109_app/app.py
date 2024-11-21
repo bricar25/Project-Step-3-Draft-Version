@@ -71,7 +71,33 @@ def editCustomer(id):
 
             # once edit is made, go to customers page
             return redirect("/customers")
+
+@app.route("/addCustomer", methods = ["POST", "GET"])
+def addCustomer():
+    if request.method == "GET":
+        return render_template("addCustomer.j2")
     
+    if request.method == "POST":
+        if request.form.get("add_customer"):
+            # get user form inputs
+            first_name = request.form["first_name"]
+            last_name = request.form["last_name"]
+            email = request.form["email"]
+            password = request.form["password"]
+            phone_number = request.form["phone_number"]
+
+            # build query
+            query = """
+                    insert into Customers (first_name, last_name, email, password, phone_number)
+                    values (%s, %s, %s, %s, %s);
+                    """
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (first_name, last_name, email, password, phone_number))
+            mysql.connection.commit()
+
+            # once edit is made, go to customers page
+            return redirect("/customers")
 
 
 
