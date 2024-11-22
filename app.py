@@ -165,7 +165,14 @@ def orders():
 def editorder():
     return render_template("editorder.html")
 
+# LINE ITEMS PAGES
+@app.route("/lineitems")
+def lineitems():
+    return render_template("lineitems.html")
 
+@app.route("/editlineitems")
+def editlineitems():
+    return render_template("editlineitems.html")
 # Listener
 if __name__ == "__main__":
     app.run(port=8011, debug=True)
