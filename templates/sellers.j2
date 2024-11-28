@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller's Table</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Seller Profiles</h1>
+        <a href="/" class="back-button">Back to Main</a>
+    </header>
+
+    <main>
+        <p>This table displays a list of all seller profiles:</p>
+
+        <table>
+            {% if data %}
+                <tr>
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">
+                        {{key}}
+                        </th>
+                    {% endfor %}
+                        <th>Actions</th>
+                    
+                </tr>
+                {% for seller in data %}
+                <tr>
+                    {% for key in seller %}
+                    <td> {{seller[key]}} </td>
+                    {% endfor %}
+                    <td class = "actions">
+                        <a href="editSeller/{{seller.sellerID}}">Edit</a>
+                        <a href="deleteSeller/{{seller.sellerID}}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+
+        </table>
+
+        <!-- Add Seller Profile Button matching the styles of other pages -->
+        <button class="add-button" onclick="window.location.href='/addSeller';">Add New Seller Profile</button>
+    </main>
+
+</body>
+</html>
+

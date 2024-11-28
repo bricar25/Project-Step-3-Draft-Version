@@ -135,9 +135,20 @@ def deleteCustomer(id):
     return redirect("/customers")
 
 # SELLER PAGES
+# route to sellers page 
+# ***** SELLERS C[R]UD *****
 @app.route("/sellers")
 def sellers():
-    return render_template("sellers.html")
+    if request.method == 'GET':
+        # query to grab all sellers in DB
+        query = """
+                select sellerID, seller_first_name, seller_last_name, store_name, store_rating, follower_count 
+                from Sellers;
+                """
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+    return render_template("sellers.j2", data = data)
 
 @app.route("/editSeller")
 def editSeller():
@@ -173,6 +184,8 @@ def lineitems():
 @app.route("/editlineitems")
 def editlineitems():
     return render_template("editlineitems.html")
+
+
 # Listener
 if __name__ == "__main__":
-    app.run(port=8011, debug=True)
+    app.run(port=8012, debug=True)
