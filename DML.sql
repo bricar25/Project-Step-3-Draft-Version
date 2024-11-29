@@ -43,7 +43,7 @@ update Sellers set
     seller_last_name  = :seller_first_name_input,
     store_name        = :store_name_input,
     store_rating      = :store_rating_input,
-    follower_count    = :follower_count_input,
+    follower_count    = :follower_count_input
 where sellerID = :sellerID_selected_from_sellers_page;
 
 -- add a new seller profile

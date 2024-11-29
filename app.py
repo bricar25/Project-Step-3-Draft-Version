@@ -195,7 +195,31 @@ def editSeller(id):
 @app.route("/addSeller", methods = ["POST", "GET"])
 def addSeller():
     if request.method == "GET":
-        return render_template("addSeller.html")
+        return render_template("addSeller.j2")
+    if request.method == "POST":
+        if request.form.get("add_seller"):
+            # get form inputs
+            seller_first_name = request.form["first_name"]
+            seller_last_name  = request.form["last_name"]
+            store_name        = request.form["store_name"]
+            store_rating      = request.form["store_rating"]
+            follower_count    = request.form["follower_count"]
+
+            # build query
+            query = """
+                    insert into Sellers 
+                    (seller_first_name, seller_last_name, store_name, store_rating, follower_count)
+                    values (%s, %s, %s, %s, %s);
+                    """
+            
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (seller_first_name, seller_last_name, store_name, store_rating, follower_count))
+            mysql.connection.commit()
+
+            # redirect to sellers page to display seller with edit
+            return redirect("/sellers")
+
 
 # PRODUCT LISTINGS PAGES
 @app.route("/products")

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Seller Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Add Seller Profile</h1>
+    </header>
+
+    <main>
+        <form id = "add_seller" action="/addSeller" method = "POST">
+            <label for="seller_id">Seller ID</label>
+            <input type="text" id="seller_id" name="seller_id" placeholder="Auto-generated" readonly>
+
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" required>
+
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" required>
+
+            <label for="store_name">Store Name</label>
+            <input type="text" id="store_name" name="store_name" required>
+
+            <label for="store_rating">Store Rating</label>
+            <input type="number" id="store_rating" name="store_rating" step="0.1" min="0" max="5" required>
+
+            <label for="follower_count">Follower Count</label>
+            <input type="number" id="follower_count" name="follower_count" required>
+
+            <button type="submit" value = "add_seller" name = "add_seller">Add Profile</button>
+            <button type="button" class="cancel" onclick="window.location.href='/sellers';">Cancel</button>
+        </form>
+    </main>
+</body>
+</html>
