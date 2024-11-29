@@ -220,6 +220,17 @@ def addSeller():
             # redirect to sellers page to display seller with edit
             return redirect("/sellers")
 
+# route to delete seller
+# ***** SELLERS CRU[D] *****
+@app.route("/deleteSeller/<int:id>")
+def deleteSeller(id):
+    query = "delete from Sellers where sellerID = %s;" %(id)
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    return redirect("/sellers")
+
 
 # PRODUCT LISTINGS PAGES
 @app.route("/products")
