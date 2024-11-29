@@ -95,7 +95,7 @@ def editCustomer(id):
             return redirect("/customers")
 
 # addCustomer route
-# ***** CUSTOMER'S CR[U]D *****
+# ***** CUSTOMER'S [C]RUD *****
 @app.route("/addCustomer", methods = ["POST", "GET"])
 def addCustomer():
     if request.method == "GET":
@@ -134,7 +134,7 @@ def deleteCustomer(id):
 
     return redirect("/customers")
 
-# SELLER PAGES
+#                               SELLER PAGES
 # route to sellers page 
 # ***** SELLERS C[R]UD *****
 @app.route("/sellers")
@@ -150,13 +150,52 @@ def sellers():
         data = cursor.fetchall()
     return render_template("sellers.j2", data = data)
 
-@app.route("/editSeller")
-def editSeller():
-    return render_template("editSeller.html")
+# route for editSeller page
+# ***** SELLERS CR[U]D *****
+@app.route("/editSeller/<int:id>", methods = ["POST", "GET"])
+def editSeller(id):
+    if request.method == "GET":
+        query = "select * from Sellers where sellerID = %s;" %(id)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
 
-@app.route("/addSeller")
+        return render_template("editSeller.j2", data = data)
+    if request.method == "POST":
+        if request.form.get("edit_seller"):
+            # get form inputs
+            seller_first_name = request.form["first_name"]
+            seller_last_name  = request.form["last_name"]
+            store_name        = request.form["store_name"]
+            store_rating      = request.form["store_rating"]
+            follower_count    = request.form["follower_count"]
+
+            # build query
+            query = """
+                    update Sellers set
+                        seller_first_name = %s,
+                        seller_last_name  = %s,
+                        store_name        = %s,
+                        store_rating      = %s,
+                        follower_count    = %s
+                    where sellerID    = %s;
+                    """
+            
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (seller_first_name, seller_last_name, store_name, store_rating, follower_count, id))
+            mysql.connection.commit()
+
+            # redirect to sellers page to display seller with edit
+            return redirect("/sellers")
+
+
+# route for addSeller page
+# ***** SELLERS [C]RUD *****
+@app.route("/addSeller", methods = ["POST", "GET"])
 def addSeller():
-    return render_template("addSeller.html")
+    if request.method == "GET":
+        return render_template("addSeller.html")
 
 # PRODUCT LISTINGS PAGES
 @app.route("/products")
