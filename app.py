@@ -22,15 +22,54 @@ def home():
 # To-Do: CRUD not implemented; only proof of concept
 @app.route("/CRMSelection")
 def CRMSelection():
-    return render_template("CRMSelection.html")
+    if request.method == "GET":
+        # query to grab all the store names from DB
+        query = "select store_name from Sellers;"
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+    return render_template("CRMSelection.j2", data = data)
 
-@app.route("/storeCRM")
-def storeCRM():
-    return render_template("store1_CRM.html")
+@app.route("/storeCRM/<store_name>")
+def storeCRM(store_name):
+    if request.method == "GET":
 
-@app.route("/editEmailOptOut")
-def editStoreCRM():
-    return render_template("editCSR.html")
+        # query to get data for Store's CRM
+        query = """
+                    select 
+                    Customers.customerID, 
+                    first_name,
+                    last_name,
+                    CASE 
+                        WHEN email_opt_out = 1 THEN 'Yes' 
+                        WHEN email_opt_out = 0 THEN 'No' 
+                    END AS email_opt_out
+                    from Customer_Seller_Relationships 
+                        inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
+                        inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
+                    where Sellers.store_name = '%s';
+                """ %(store_name)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        return render_template("store_CRM.j2", data = data, store_name = store_name)
+
+@app.route("/editEmailOptOut/<store_name>/<int:customerID>", methods = ["POST", "GET"])
+def editEmailOptOut(store_name, customerID):
+    if request.method == "GET":
+        query = """
+                select Customers.customerID, first_name, last_name, email_opt_out 
+                from Customer_Seller_Relationships 
+                    inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
+                    inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
+                where Sellers.store_name = %s and Customers.customerID = %s;
+                """
+        cursor = mysql.connection.cursor()
+        cursor.execute(query, (store_name, customerID))
+        data = cursor.fetchall()
+
+        return render_template("editEmailOptOut.j2", data = data, store_name = store_name)
 
 @app.route("/addCustomerToCRM")
 def addCustomerToCRM():

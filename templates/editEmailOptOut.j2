@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORE'S CRM</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+    {% if data %}
+        <h1>edit email opt-out for {{store_name}} customer: </h1>
+        <a href="/" class="back-button"> Back to Main Page</a>
+        <a href="/storeCRM/{{store_name}}" class="back-button">Back to CRM</a>
+    </header>
+    <main>
+        <table>
+            
+                {{data}}
+                {{store_name}}
+            
+            
+            <tr>
+                {% for key in data[0].keys()%}
+                <th>{{key}}</th>
+                {% endfor %}
+                <th>Actions</th>
+            </tr>
+            
+        {% for customer in data %}
+            <tr>
+                {% for key in customer %}
+                {% if key != 'email_opt_out'%}
+                    <td>{{customer[key]}}</td>
+                {% else %}
+                    <td>
+                        {% if customer.email_opt_out == 1%}
+                        <select>
+                            <option value=1 selected>Yes</option>
+                            <option value=0>No</option>
+                        </select>
+                        {% else %}
+                        <select>
+                            <option value=1>Yes</option>
+                            <option value=0 selected>No</option>
+                        </select>
+                        {% endif %}
+                    </td>
+
+                {% endif%}
+                {% endfor %}
+                <td class="actions">
+                    <a href="/storeCRM">
+                        Confirm </a>
+                    <a href="/storeCRM/{{store_name}}">
+                        Cancel</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </main>
+    {% endif %}
+</body>
+</html>

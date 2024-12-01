@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORE'S CRM</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+<body>
+    <header>
+        <h1>{{store_name}} CRM</h1>
+        <a href="/" class="back-button">Back to Main Page</a>
+        <a href="/CRMSelection" class="back-button"> Back to Store Selection</a>
+    </header>
+    <main>
+        {% if data %}        
+        <table>
+            <tr>
+                {% for key in data[0].keys()%}
+                <th>{{key}}</th>
+                {% endfor %}
+                <th>Actions</th>
+            </tr>
+            <tr>
+                {% for customer in data %}
+                {% for key in customer %}
+                <td>{{customer[key]}}</td>
+                {% endfor %}
+                <td class="actions">
+                    <a href= "/editEmailOptOut/{{store_name}}/{{customer.customerID}}">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+                {% endfor %}
+            </tr>
+
+        </table>
+        {% endif %}
+        <div class = "add-button-container">
+            <a href="/addCustomerToCRM" class="add-button">ADD CUSTOMER TO CRM</a>
+        </div>
+
+    </main>
+
+
+</body>
+</html>

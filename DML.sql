@@ -59,7 +59,7 @@ delete from Sellers where sellerID = :sellerID_selected_from_sellers_page;
 select store_name from Sellers;
 
 -- get customers after user selects which CRM (which seller's CRM) to view
-select first_name, last_name, email_opt_out from Customer_Seller_Relationships 
+select Customers.customerID, first_name, last_name, email_opt_out from Customer_Seller_Relationships 
     inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
     inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
     where Sellers.store_name = :store_selected_from_CRMSelection;
