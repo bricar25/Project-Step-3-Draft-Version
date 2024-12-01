@@ -49,6 +49,7 @@ def storeCRM(store_name):
                         inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
                     where Sellers.store_name = '%s';
                 """ %(store_name)
+        
         cursor = mysql.connection.cursor()
         cursor.execute(query)
         data = cursor.fetchall()
@@ -57,6 +58,8 @@ def storeCRM(store_name):
 
 @app.route("/editEmailOptOut/<store_name>/<int:customerID>", methods = ["POST", "GET"])
 def editEmailOptOut(store_name, customerID):
+
+    # GET - simply show the CRM
     if request.method == "GET":
         query = """
                 select Customers.customerID, first_name, last_name, email_opt_out 
@@ -69,7 +72,31 @@ def editEmailOptOut(store_name, customerID):
         cursor.execute(query, (store_name, customerID))
         data = cursor.fetchall()
 
-        return render_template("editEmailOptOut.j2", data = data, store_name = store_name)
+        return render_template("editEmailOptOut.j2", data = data, customerID = customerID, store_name = store_name)
+    
+    # POST
+    if request.method == "POST":
+        if request.form.get("edit_opt_out"):
+            email_opt_option = request.form.get('email_opt_out')
+            print(email_opt_option)
+
+            query = """
+                    update Customer_Seller_Relationships set
+                        email_opt_out = %s
+                    where csrID = (
+                        select csrID from Customer_Seller_Relationships 
+                        inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
+                        inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
+                        where Sellers.store_name = '%s' and Customers.customerID = %s);
+                    """%(email_opt_option, store_name, customerID)
+            
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query)
+            mysql.connection.commit()
+
+            return redirect("/storeCRM/%s" %(store_name))
+
 
 @app.route("/addCustomerToCRM")
 def addCustomerToCRM():

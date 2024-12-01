@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STORE'S CRM</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        form {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+
+
+
 </head>
 <body>
     <header>
@@ -14,12 +27,8 @@
         <a href="/storeCRM/{{store_name}}" class="back-button">Back to CRM</a>
     </header>
     <main>
-        <table>
-            
-                {{data}}
-                {{store_name}}
-            
-            
+        <form id = "edit_opt_out" method = "POST" action = "/editEmailOptOut/{{store_name}}/{{customerID}}">
+        <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 {% for key in data[0].keys()%}
                 <th>{{key}}</th>
@@ -33,16 +42,17 @@
                 {% if key != 'email_opt_out'%}
                     <td>{{customer[key]}}</td>
                 {% else %}
+                    
                     <td>
                         {% if customer.email_opt_out == 1%}
-                        <select>
-                            <option value=1 selected>Yes</option>
-                            <option value=0>No</option>
+                        <select name = "email_opt_out">
+                            <option value=TRUE selected>Yes</option>
+                            <option value=FALSE>No</option>
                         </select>
                         {% else %}
-                        <select>
-                            <option value=1>Yes</option>
-                            <option value=0 selected>No</option>
+                        <select name = "email_opt_out">
+                            <option value=TRUE>Yes</option>
+                            <option value=FALSE selected>No</option>
                         </select>
                         {% endif %}
                     </td>
@@ -50,14 +60,15 @@
                 {% endif%}
                 {% endfor %}
                 <td class="actions">
-                    <a href="/storeCRM">
-                        Confirm </a>
+                    <button type="submit" name = "edit_opt_out" value = "edit_oput_out">
+                        Confirm </button>
                     <a href="/storeCRM/{{store_name}}">
                         Cancel</a>
                 </td>
             </tr>
         {% endfor %}
         </table>
+        </form>
     </main>
     {% endif %}
 </body>

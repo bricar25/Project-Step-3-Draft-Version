@@ -72,6 +72,7 @@ input[type="tel"] {
     border-radius: 4px;
 }
 select {
+    width: 80px;
     margin-top: 8px;
     font-size: 32px;    
     padding: 12px 16px;  
