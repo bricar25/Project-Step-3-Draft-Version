@@ -22,22 +22,24 @@
                 {% endfor %}
                 <th>Actions</th>
             </tr>
+            {% for customer in data %}
             <tr>
-                {% for customer in data %}
+                
                 {% for key in customer %}
                 <td>{{customer[key]}}</td>
                 {% endfor %}
                 <td class="actions">
-                    <a href= "/editEmailOptOut/{{store_name}}/{{customer.customerID}}">Edit</a>
-                    <a href="#">Delete</a>
+                    <a href= "/editEmailOptOut/{{store_name}}/{{customer.csrID}}">Edit</a>
+                    <a href="/deleteCustomerFromCRM/{{store_name}}/{{customer.csrID}}">Delete</a>
                 </td>
-                {% endfor %}
+                
             </tr>
+            {% endfor %}
 
         </table>
         {% endif %}
         <div class = "add-button-container">
-            <a href="/addCustomerToCRM" class="add-button">ADD CUSTOMER TO CRM</a>
+            <a href="/listCustomers_CRM/{{store_name}}" class="add-button">ADD CUSTOMER TO CRM</a>
         </div>
 
     </main>

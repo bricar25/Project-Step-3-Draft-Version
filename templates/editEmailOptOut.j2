@@ -25,7 +25,7 @@
         <a href="/storeCRM/{{store_name}}" class="back-button">Back to CRM</a>
     </header>
     <main>
-        <form id = "edit_opt_out" method = "POST" action = "/editEmailOptOut/{{store_name}}/{{customerID}}">
+        <form id = "edit_opt_out" method = "POST" action = "/editEmailOptOut/{{store_name}}/{{csrID}}">
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 {% for key in data[0].keys()%}

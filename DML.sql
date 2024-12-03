@@ -88,6 +88,9 @@ where csrID = (
     where Sellers.store_name = :store_selected_from_CRMSelection and Customers.customerID = :customerID_selected_from_CRM
 );
 
+-- add customer to store's CRM
+insert into Customer_Seller_Relationships (customerID, sellerID) values
+(:customerID_selected, :sellerID_of_store_CRM);
 
 --  ***** ***** ***** ***** ***** ORDERS PAGES ***** ***** ***** ***** *****
 -- get a list of orders for the orders main page
