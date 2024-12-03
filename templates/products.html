@@ -16,84 +16,31 @@
     <main>
         <p>This table displays details for each product available for sale:</p>
 
-        <table id="productTable">
+        <table>
+            {% if data %}
             <tr>
-                <th>Product ID</th>
-                <th>Seller ID</th>
-                <th>Category</th>
-                <th>Brand</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Condition</th>
-                <th>Color</th>
-                <th>Actions</th>
+                <!--iterate through each key in data[0] to get the column name-->
+                {% for key in data[0].keys() %}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">
+                        {{key}}</th>
+                {% endfor %}
+                    <th>Actions</th>
             </tr>
+
+            {% for products in data %}
             <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>Shirts</td>
-                <td>Adidas</td>
-                <td>
-                    <select name="size" id="size">
-                        <option value="Small">Small</option>
-                        <option value="Medium" selected>Medium</option>
-                        <option value="Large">Large</option>
-                    </select>
-                </td>
-                <td>$119.99</td>
-                <td>New</td>
-                <td>Black</td>
+                {% for key in products %}
+                <td>{{products[key]}}</td>
+                {% endfor %}
                 <td class="actions">
-                    <a href="/editProducts">Edit</a>
-                    <a href="#delete">Delete</a>
+                    <a href="editProduct/{{products.productID}}">Edit</a>
+                    <a href="deleteProduct/{{products.productID}}">Delete</a>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>2</td>
-                <td>Pants</td>
-                <td>Nike</td>
-                <td>
-                    <select name="size" id="size">
-                        <option value="Small">Small</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large" selected>Large</option>
-                    </select>
-                </td>
-                <td>$49.99</td>
-                <td>New</td>
-                <td>Red</td>
-                <td class="actions">
-                    <a href="/editProducts">Edit</a>
-                    <a href="#delete">Delete</a>
-                </td>
-            </tr>
-            <!-- Add New Product Row -->
-            <tr>
-                <td>New</td>
-                <td><input type="text" name="seller_id" placeholder="Seller ID"></td>
-                <td><input type="text" name="category" placeholder="Category"></td>
-                <td><input type="text" name="brand" placeholder="Brand"></td>
-                <td>
-                    <select name="size" id="new_size">
-                        <option value="Small">Small</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large">Large</option>
-                    </select>
-                </td>
-                <td><input type="text" name="price" placeholder="Price"></td>
-                <td>
-                    <select name="condition" id="new_condition">
-                        <option value="New">New</option>
-                        <option value="Used">Used</option>
-                    </select>
-                </td>
-                <td><input type="text" name="color" placeholder="Color"></td>
-                <td class="actions">
-                    <button type="button" disabled>Add</button>
-                </td>
-            </tr>
+            {% endfor %}
+            {% endif %}
         </table>
+
     </main>
 </body>
 </html>

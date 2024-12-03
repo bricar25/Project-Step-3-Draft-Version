@@ -299,13 +299,114 @@ def deleteSeller(id):
 
 
 # PRODUCT LISTINGS PAGES
-@app.route("/products")
+@app.route("/products", methods=["POST", "GET"])
 def products():
-    return render_template("products.html")
+    if request.method == "GET":
+        # query to grab all customers in db. 
+        query = """
+                select productID, sellerID, category, brand, price, product_condition, color 
+                from Products; 
+                """
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        print(data)
+        # render customer page paassing our query data to the customers template
+        return render_template("products.html", data = data)
 
-@app.route("/editProducts")
-def editProducts():
-    return render_template("editproducts.html")
+@app.route("/editProduct/<int:id>", methods = ["POST", "GET"])
+def editProduct(id):
+    if request.method == "GET":
+        # get customer's data to set as default values in editCustomer page
+        query = "select * from Products where productID = %s" %(id)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        return render_template("editProduct.j2", data = data)
+    
+    if request.method == "POST":
+        print(f"if statement ok and product id = {id}")
+        if request.form.get("edit_product"):
+            print("second if statement ok")
+            # get user form inputs
+            productID = request.form["productID"]
+            print(f'productID = {productID}')
+            sellerID = request.form["sellerID"]
+            print(f'sellerID = {sellerID}')
+            category = request.form["category"]
+            print(f'category = {category}')
+            brand = request.form["brand"]
+            print(f'brand = {brand}')
+            price = request.form["price"]
+            print(f'price = {price}')
+            product_condition = request.form["product_condition"]
+            print(f'condition = {product_condition}')
+            color = request.form["color"]
+            print(f'color = {color}')
+            
+
+            # build query
+            query = """
+                    update Products set
+                    productID = %s, 
+                    sellerID = %s,
+                    category = %s,
+                    brand  = %s,
+                    price = %s,
+                    product_condition = %s,
+                    color = %s
+                    where productID = %s;
+                    """
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (productID, sellerID, category, brand, price, product_condition, color, id))
+            mysql.connection.commit()
+            # once edit is made, go to customers page
+            return redirect("/products")
+
+# addProducts route
+# ***** Products [C]RUD *****
+@app.route("/addProducts", methods = ["POST", "GET"])
+def addProducts():
+    if request.method == "GET":
+        return render_template("addProducts.j2")
+    
+    if request.method == "POST":
+        if request.form.get("add_products"):
+            # get user form inputs
+            productID = request.form["productID"]
+            sellerID = request.form["sellerID"]
+            category = request.form["category"]
+            brand = request.form["brand"]
+            price = request.form["price"]
+            product_condition = request.form["product_condition"]
+            color = request.form["color"]
+
+            # build query
+            query = """
+                    insert into Products (productID, sellerID, category, brand, price, product_condition, color)
+                    values (%s, %s, %s, %s, %s, %s, %s);
+                    """
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (productID, sellerID, category, brand, price, product_condition, color))
+            mysql.connection.commit()
+
+            # once edit is made, go to customers page
+            return redirect("/products")
+
+# delete products
+# ***** CUSTOMER'S CRU[D] *****
+@app.route("/deleteProducts/<int:id>")
+def deleteProducts(id):
+    query = "delete from Products where productID = %s;" %(id)
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    return redirect("/products")
+
 
 # ORDERS PAGES
 @app.route("/orders")
