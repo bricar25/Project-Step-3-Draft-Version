@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers Table</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Add Customer to {{store_name}} CRM</h1>
+        <a href="/" class="back-button">Back to Main</a>
+        <a href="/storeCRM/{{store_name}}" class="back-button">Back to {{store_name}} CRM</a>
+    </header>
+
+    <main>
+        <p>This table displays all customer profiles to add to <b>{{store_name}}</b> CRM.</p>
+        <p>Once added to CRM, <b>{{store_name}}</b> can market to selected customer. </p>
+
+        <table>
+            {% if data %}
+            <tr>
+                <!--iterate through each key in data[0] to get the column name-->
+                {% for key in data[0].keys() %}
+                    {% if key != 'password'%}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">
+                        {{key}}</th>
+                    {% endif %}
+                {% endfor %}
+                    <th>Actions</th>
+            </tr>
+
+            {% for customer in data %}
+            <tr>
+                {% for key in customer %}
+                    {% if key != 'password'%}
+                    <td>{{customer[key]}}</td>
+                    {% endif %}
+                {% endfor %}
+                <td class="actions">
+                    <a href="/addCustomerToCRM/{{store_name}}/{{customer.customerID}}">Add To CRM</a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+
+
+    </main>
+
+</body>
+</html>

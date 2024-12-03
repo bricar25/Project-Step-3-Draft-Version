@@ -37,7 +37,7 @@ def storeCRM(store_name):
         # query to get data for Store's CRM
         query = """
                     select 
-                    Customers.customerID, 
+                    csrID, 
                     first_name,
                     last_name,
                     CASE 
@@ -56,23 +56,23 @@ def storeCRM(store_name):
 
         return render_template("store_CRM.j2", data = data, store_name = store_name)
 
-@app.route("/editEmailOptOut/<store_name>/<int:customerID>", methods = ["POST", "GET"])
-def editEmailOptOut(store_name, customerID):
+@app.route("/editEmailOptOut/<store_name>/<int:csrID>", methods = ["POST", "GET"])
+def editEmailOptOut(store_name, csrID):
 
     # GET - simply show the CRM
     if request.method == "GET":
         query = """
-                select Customers.customerID, first_name, last_name, email_opt_out 
+                select csrID, first_name, last_name, email_opt_out 
                 from Customer_Seller_Relationships 
                     inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
                     inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
-                where Sellers.store_name = %s and Customers.customerID = %s;
+                where Sellers.store_name = %s and csrID = %s;
                 """
         cursor = mysql.connection.cursor()
-        cursor.execute(query, (store_name, customerID))
+        cursor.execute(query, (store_name, csrID))
         data = cursor.fetchall()
 
-        return render_template("editEmailOptOut.j2", data = data, customerID = customerID, store_name = store_name)
+        return render_template("editEmailOptOut.j2", data = data, csrID = csrID, store_name = store_name)
     
     # POST
     if request.method == "POST":
@@ -83,12 +83,8 @@ def editEmailOptOut(store_name, customerID):
             query = """
                     update Customer_Seller_Relationships set
                         email_opt_out = %s
-                    where csrID = (
-                        select csrID from Customer_Seller_Relationships 
-                        inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
-                        inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
-                        where Sellers.store_name = '%s' and Customers.customerID = %s);
-                    """%(email_opt_option, store_name, customerID)
+                    where csrID = %s;
+                    """%(email_opt_option, csrID)
             
             # submit and commit query
             cursor = mysql.connection.cursor()
@@ -98,9 +94,53 @@ def editEmailOptOut(store_name, customerID):
             return redirect("/storeCRM/%s" %(store_name))
 
 
-@app.route("/addCustomerToCRM")
-def addCustomerToCRM():
-    return render_template("addCustomerToCRM.html")
+@app.route("/listCustomers_CRM/<store_name>")
+def listCustomers_CRM(store_name):
+    if request.method == "GET":
+        # query to grab all customers in db. 
+        # to-do 
+        query = """
+                select customerID, first_name, last_name, email, password, phone_number 
+                from Customers; 
+                """
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        # render customer page paassing our query data to the customers template
+        return render_template("addCustomerToCRM_R2.j2", data = data, store_name = store_name)
+    #return render_template("addCustomerToCRM.html")
+
+@app.route("/addCustomerToCRM/<store_name>/<int:customerID>")
+def addCustommerToCRM(store_name, customerID):
+
+    # sub_query = "select sellerID from Sellers where store_name = '%s';" %(store_name)
+    # cursor = mysql.connection.cursor()
+    # cursor.execute(sub_query)
+    # sellerID = cursor.fetchall()
+
+    query = """
+            insert into Customer_Seller_Relationships (customerID, sellerID) 
+            values (%s, (select sellerID from Sellers where store_name = '%s'));
+            """%(customerID, store_name) 
+    
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    return redirect("/storeCRM/%s"%(store_name))
+
+@app.route("/deleteCustomerFromCRM/<store_name>/<int:csrID>")
+def deleteCustomerFromCRM(store_name, csrID):
+    query = """
+            delete from Customer_Seller_Relationships
+            where csrID = %s; 
+            """%(csrID)
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    return redirect("/storeCRM/%s"%(store_name))
 
 
 # Customer Pages
