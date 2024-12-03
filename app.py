@@ -18,7 +18,7 @@ mysql = MySQL(app)
 def home():
     return render_template("main.html")
 
-# Customer Seller Relationships Pages
+#                 CUSTOMER SELLER RELATIONSHIP PAGES
 # To-Do: CRUD not implemented; only proof of concept
 @app.route("/CRMSelection")
 def CRMSelection():
@@ -143,7 +143,7 @@ def deleteCustomerFromCRM(store_name, csrID):
     return redirect("/storeCRM/%s"%(store_name))
 
 
-# Customer Pages
+#                           CUSTOMER PAGES
 # ***** CUSTOMER'S C[R]UD *****
 @app.route("/customers", methods=["POST", "GET"])
 def customers():
@@ -338,7 +338,7 @@ def deleteSeller(id):
     return redirect("/sellers")
 
 
-# PRODUCT LISTINGS PAGES
+#                       PRODUCT LISTINGS PAGES
 @app.route("/products", methods=["POST", "GET"])
 def products():
     if request.method == "GET":
@@ -437,7 +437,7 @@ def addProducts():
             return redirect("/products")
 
 # delete products
-# ***** CUSTOMER'S CRU[D] *****
+# ***** PRODUCTS'S CRU[D] *****
 @app.route("/deleteProducts/<int:id>")
 def deleteProducts(id):
     query = "delete from Products where productID = %s;" %(id)
@@ -448,7 +448,7 @@ def deleteProducts(id):
     return redirect("/products")
 
 
-# ORDERS PAGES
+#                           ORDERS PAGES
 @app.route("/orders")
 def orders():
     return render_template("orders.html")
