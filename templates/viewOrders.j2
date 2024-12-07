@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>View All Orders</h1>
+        <a href="/" class="back-button">Back to Main</a>
+    </header>
+
+    <main>
+        <p>This table displays all orders</p>
+        <p>Click on View Line Items to view and edit Order Line Items</p>
+        <p>Click on Edit to edit order details such as date and shipping status</p>
+
+        <table>
+            {% if data %}
+            <tr>
+                    <th>View</th>
+                <!--iterate through each key in data[0] to get the column name-->
+                {% for key in data[0].keys() %}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">
+                        {{key}}</th>
+                {% endfor %}
+                    <th>Actions</th>
+            </tr>
+
+            {% for order in data %}
+            <tr>
+                <td class="actions">
+                    <a href="/viewOrderDetails/{{order.orderID}}">View Line Items</a>
+                </td>
+                {% for key in order %}
+                <td>{{order[key]}}</td>
+                {% endfor %}
+                <td class="actions">
+                    <a href="/editOrder/{{order.orderID}}">Edit</a>
+                    <a href="/deleteOrder/{{order.orderID}}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+
+        <!-- Add Customer Profile Button matching the styles of other pages -->
+        <button class="add-button" onclick="window.location.href='/customerSelection';">+ Create New Order</button>
+    </main>
+
+</body>
+</html>

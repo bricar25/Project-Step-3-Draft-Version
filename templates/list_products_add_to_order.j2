@@ -3,47 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>Customers Table</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
-        <h1>Product Listings</h1>
+        <h1>Add to OrderID:{{orderID}}</h1>
+        <a href="/" class="back-button">Back to Main</a>
+        <a href="/viewOrderDetails/{{orderID}}" class="back-button">Back to OrderID:{{orderID}}</a>
     </header>
 
-    <button class="back-button" onclick="window.location.href='/';">Back to Main</button>
-
     <main>
-        <p>This table displays details for each product available for sale:</p>
+        <p>This table displays all products to add to <b>OrderID:{{orderID}}</b> </p>
+        <p> NOTE: does not display products already in order</p>
+
 
         <table>
             {% if data %}
             <tr>
                 <!--iterate through each key in data[0] to get the column name-->
                 {% for key in data[0].keys() %}
+                    {% if key != 'password'%}
                     <th scope="col" data-field="{{ key }}" data-filter-control="input">
                         {{key}}</th>
+                    {% endif %}
                 {% endfor %}
                     <th>Actions</th>
             </tr>
 
-            {% for products in data %}
+            {% for product in data %}
             <tr>
-                {% for key in products %}
-                <td>{{products[key]}}</td>
+                {% for key in product %}
+                    <td>{{product[key]}}</td>
                 {% endfor %}
                 <td class="actions">
-                    <a href="editProduct/{{products.productID}}">Edit</a>
-                    <a href="deleteProduct/{{products.productID}}">Delete</a>
+                    <a href="/addProductToOrder/{{orderID}}/{{product.productID}}">Add To Order</a>
                 </td>
+                
             </tr>
             {% endfor %}
             {% endif %}
         </table>
 
-        <button class="add-button" onclick="window.location.href='/addProduct';">Add New Product</button>
 
     </main>
+
 </body>
 </html>
-

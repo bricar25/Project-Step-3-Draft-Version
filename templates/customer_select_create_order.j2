@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Store</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        select {
+            width: 200px;
+            margin-top: 8px;
+            font-size: 32px;    
+            padding: 12px 16px;  
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>select a customer to create order</h1>
+        <a href="/" class="back-button">Back to Main</a>
+        <a href="/viewOrders" class="back-button">Back to All Orders</a>
+    </header>
+
+    <main>
+        {% if data %}      
+        <select id="customer-select">
+            <option value="">--Please choose an option--</option>
+            {% for customer in data %}
+            <option value="/createBlankOrder/{{customer.customerID}}">{{customer.first_name}}, {{customer.last_name}}</option>
+             {% endfor %}
+        </select>
+       
+        <button onclick="redirectToOrder()">Create Order</button>
+        {% endif%}
+    </main>
+
+    <script>
+        function redirectToOrder() {
+            const customerSelect = document.getElementById('customer-select');
+            const selectedCustomer = customerSelect.value;
+            if (selectedCustomer) {
+                window.location.href = selectedCustomer;
+            } else {
+                alert('Please select a customer  to continue.');
+            }
+        }
+    </script>
+</body>
+</html>

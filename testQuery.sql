@@ -1,7 +1,4 @@
-select * from Customers;
+insert into Orders (customerID, order_date, shipped, total)
+values (1, "2024-12-07", 0, 0);
 
-select * from Customer_Seller_Relationships
-where sellerID = (select sellerID from Sellers where store_name = 'Son Shades');
-
-
-
+select LAST_INSERT_ID();

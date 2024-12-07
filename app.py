@@ -1,6 +1,7 @@
 from flask import Flask, render_template, json, redirect
 from flask_mysqldb import MySQL
 from flask import request
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -19,7 +20,7 @@ def home():
     return render_template("main.html")
 
 #                 CUSTOMER SELLER RELATIONSHIP PAGES
-# To-Do: CRUD not implemented; only proof of concept
+# route for CRMSelection - let's user select the store to view store's CRM
 @app.route("/CRMSelection")
 def CRMSelection():
     if request.method == "GET":
@@ -30,24 +31,25 @@ def CRMSelection():
         data = cursor.fetchall()
     return render_template("CRMSelection.j2", data = data)
 
+# route for store's CRM - let's user view selected store's CRM
 @app.route("/storeCRM/<store_name>")
 def storeCRM(store_name):
     if request.method == "GET":
 
         # query to get data for Store's CRM
         query = """
-                    select 
-                    csrID, 
-                    first_name,
-                    last_name,
-                    CASE 
-                        WHEN email_opt_out = 1 THEN 'Yes' 
-                        WHEN email_opt_out = 0 THEN 'No' 
-                    END AS email_opt_out
-                    from Customer_Seller_Relationships 
-                        inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
-                        inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
-                    where Sellers.store_name = '%s';
+                select 
+                csrID, 
+                first_name,
+                last_name,
+                CASE 
+                    WHEN email_opt_out = 1 THEN 'Yes' 
+                    WHEN email_opt_out = 0 THEN 'No' 
+                END AS email_opt_out
+                from Customer_Seller_Relationships 
+                    inner join Customers on Customer_Seller_Relationships.customerID = Customers.customerID
+                    inner join Sellers on Customer_Seller_Relationships.sellerID = Sellers.sellerID
+                where Sellers.store_name = '%s';
                 """ %(store_name)
         
         cursor = mysql.connection.cursor()
@@ -56,10 +58,11 @@ def storeCRM(store_name):
 
         return render_template("store_CRM.j2", data = data, store_name = store_name)
 
+# let's user edit customer seller relationship. let's user change email opt out
 @app.route("/editEmailOptOut/<store_name>/<int:csrID>", methods = ["POST", "GET"])
 def editEmailOptOut(store_name, csrID):
 
-    # GET - simply show the CRM
+    # GET - simply show the CSR
     if request.method == "GET":
         query = """
                 select csrID, first_name, last_name, email_opt_out 
@@ -74,11 +77,10 @@ def editEmailOptOut(store_name, csrID):
 
         return render_template("editEmailOptOut.j2", data = data, csrID = csrID, store_name = store_name)
     
-    # POST
+    # POST - update email opt out
     if request.method == "POST":
         if request.form.get("edit_opt_out"):
             email_opt_option = request.form.get('email_opt_out')
-            print(email_opt_option)
 
             query = """
                     update Customer_Seller_Relationships set
@@ -93,12 +95,12 @@ def editEmailOptOut(store_name, csrID):
 
             return redirect("/storeCRM/%s" %(store_name))
 
-
+# lists the customers so that a customer can be added to Store's CRM
 @app.route("/listCustomers_CRM/<store_name>")
 def listCustomers_CRM(store_name):
     if request.method == "GET":
         # query to grab all customers in db. 
-        # to-do 
+        # To-Do: write the cury so that customers already in the crm are excluded
         query = """
                 select customerID, first_name, last_name, email, password, phone_number 
                 from Customers; 
@@ -109,16 +111,10 @@ def listCustomers_CRM(store_name):
 
         # render customer page paassing our query data to the customers template
         return render_template("addCustomerToCRM_R2.j2", data = data, store_name = store_name)
-    #return render_template("addCustomerToCRM.html")
 
+# if user selects to ADD customer to CRM, this runs and commmits the appropriate query
 @app.route("/addCustomerToCRM/<store_name>/<int:customerID>")
 def addCustommerToCRM(store_name, customerID):
-
-    # sub_query = "select sellerID from Sellers where store_name = '%s';" %(store_name)
-    # cursor = mysql.connection.cursor()
-    # cursor.execute(sub_query)
-    # sellerID = cursor.fetchall()
-
     query = """
             insert into Customer_Seller_Relationships (customerID, sellerID) 
             values (%s, (select sellerID from Sellers where store_name = '%s'));
@@ -130,6 +126,7 @@ def addCustommerToCRM(store_name, customerID):
 
     return redirect("/storeCRM/%s"%(store_name))
 
+# if user selects to DELETE customer from CRM, this runs and commits the appropriate query
 @app.route("/deleteCustomerFromCRM/<store_name>/<int:csrID>")
 def deleteCustomerFromCRM(store_name, csrID):
     query = """
@@ -449,6 +446,238 @@ def deleteProducts(id):
 
 
 #                           ORDERS PAGES
+@app.route("/viewOrders", methods=["POST", "GET"])
+def viewOrders():
+    if request.method == "GET":
+        # query to grab 
+        query = """
+                select * 
+                from Orders; 
+                """
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        # render 
+        return render_template("viewOrders.j2", data = data)
+
+@app.route("/viewOrderDetails/<int:orderID>")
+def viewOrderDetails(orderID):
+    # view line items
+    if request.method == "GET":
+        
+        # query to get order data
+        query = """
+                select * 
+                from Orders
+                where orderID = %s; 
+                """ %(orderID)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        orderData = cursor.fetchall()
+
+        # query to get line item data HERE!!!!
+        query2 = """
+                select lineitemID, Orders.orderID, store_name, Line_Items.productID, sell_price, qty 
+                from Orders inner join Line_Items on Orders.orderID = Line_Items.orderID
+                inner join Products on Products.productID = Line_Items.productID
+                inner join Sellers on Sellers.sellerID = Products.sellerID
+                where Orders.orderID = %s
+                order by lineitemID;
+                """ %(orderID)
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute(query2)
+        data = cursor.fetchall()
+
+        return render_template("order_line_items.j2", data = data, orderID = orderID, orderData = orderData)
+
+@app.route("/editOrder/<int:orderID>", methods = ["POST", "GET"])
+def editOrder(orderID):
+    # used to edit order total, order status, order date only 
+    if request.method == "GET":
+        # 
+        query = "select * from Orders where orderID = %s" %(orderID)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        return render_template("editOrder.j2", data = data)
+    
+    if request.method == "POST":
+        if request.form.get("edit_order"):
+            # get user form inputs
+            order_date = request.form["order_date"]
+            order_status = request.form["order_status"]
+            order_total = request.form["order_total"]
+
+            # build query
+            query = """
+                    update Orders set
+                    order_date   = %s, 
+                    shipped = %s,
+                    total  = %s
+                    where orderID = %s;
+                    """
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (order_date, order_status, order_total, orderID))
+            mysql.connection.commit()
+
+            # once edit is made, go to 
+            return redirect("/viewOrders")
+
+@app.route("/customerSelection")
+def CustomerSelection():
+    if request.method == "GET":
+        # query to grab all the customer names from DB
+        query = "select customerID, first_name, last_name from Customers;"
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+    return render_template("customer_select_create_order.j2", data = data)
+
+@app.route("/createBlankOrder/<int:customerID>/", methods = ["POST", "GET"])
+def createBlankOrder(customerID):
+
+    # Get today's date
+    today = datetime.today()
+
+    # Format the date as YYYY-MM-DD
+    format_date = today.strftime('%Y-%m-%d')
+
+    query = """
+            insert into Orders (customerID, order_date, shipped, total)
+            values (%s, '%s', 0, 0)
+            """ %(customerID, format_date)
+    # submit and commit query
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    # query to get the ID of the last order created
+    query2 = "select LAST_INSERT_ID()"
+    cursor = mysql.connection.cursor()
+    cursor.execute(query2)
+    orderID = cursor.fetchall()[0]['LAST_INSERT_ID()']
+
+    return redirect("/viewOrderDetails/%s"%(orderID))
+
+    
+    
+
+
+@app.route("/edit_line_item/<int:orderID>/<int:itemID>", methods = ["POST", "GET"])
+def edit_line_item(orderID, itemID):
+    if request.method == "GET":
+        # 
+        query = "select * from Line_Items where orderID = %s and lineitemID = %s" %(orderID, itemID)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        return render_template("edit_line_item.j2", orderID = orderID, data = data)
+    
+    if request.method == "POST":
+        if request.form.get("edit_line_item"):
+            # get user form inputs
+            line_item_sell_price = request.form["line_item_sell_price"]
+            line_item_qty        = request.form["line_item_qty"]
+
+
+            # build query
+            query = """
+                    update Line_Items set
+                    sell_price   = %s, 
+                    qty = %s
+                    where lineitemID = %s;
+                    """
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (line_item_sell_price, line_item_qty, itemID))
+            mysql.connection.commit()
+
+            # once edit is made, go to 
+            return redirect("/viewOrderDetails/%s" %(orderID))
+
+@app.route("/listProducts_addToOrder/<int:orderID>", methods = ["POST", "GET"])
+def list_products(orderID):
+    if request.method == "GET":
+        # query to grab all customers in db. 
+        # To-Do: write the cury so that customers already in the crm are excluded
+        query = """
+                SELECT 
+                    Products.productID, 
+                    store_name, 
+                    category, 
+                    brand, 
+                    size, 
+                    price, 
+                    product_condition, 
+                    color
+                FROM Products
+                INNER JOIN Sellers 
+                    ON Products.sellerID = Sellers.sellerID
+                WHERE Products.productID NOT IN (
+                    SELECT productID 
+                    FROM Line_Items 
+                    WHERE orderID = %s);
+                """%(orderID)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+        # render customer page paassing our query data to the customers template
+        return render_template("list_products_add_to_order.j2", data = data, orderID = orderID)
+
+
+@app.route("/addProductToOrder/<int:orderID>/<int:productID>")
+def addProductToOrder(orderID, productID):
+    query = """
+            insert into Line_Items (orderID, productID, sell_price, qty) 
+            values (%s, %s, (select price from Products where productID = %s), 1);
+            """%(orderID, productID, productID) 
+    
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    return redirect("/viewOrderDetails/%s"%(orderID))
+
+@app.route("/updateOrderTotal/<int:orderID>")
+def updateOrderTotal(orderID):
+    query = """
+            select lineitemID, sell_price, qty 
+            from Line_Items 
+            where orderID = %s
+            order by lineitemID;
+            """ %(orderID)
+        
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+
+    # calculate total
+    new_total = 0
+    sales_tax_rate = 8.1/100
+    if data:
+        for item in data: 
+            new_total += float(item['sell_price']) * float(item['qty'])
+        new_total = new_total * (1+sales_tax_rate)
+    
+    # update total
+    query2 = """
+                update Orders 
+                set total  = %s
+                where orderID = %s;
+             """ %(new_total, orderID)
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(query2)
+    mysql.connection.commit()
+
+    return redirect("/viewOrderDetails/%s"%(orderID))
+
 @app.route("/orders")
 def orders():
     return render_template("orders.html")
@@ -469,4 +698,4 @@ def editlineitems():
 
 # Listener
 if __name__ == "__main__":
-    app.run(port=8012, debug=True)
+    app.run(port=8013, debug=True)

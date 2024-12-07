@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Line Items</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+<body>
+    <header>
+        <h1> OrderID:{{orderID}} </h1>
+        <p>Order Placed: {{orderData[0].order_date}}</p>
+        <p>Order Status: {{orderData[0].shipped}}</p>
+        <a href="/" class="back-button">Back to Main Page</a>
+        <a href="/viewOrders" class="back-button"> Back to All Orders</a>
+        <a href="/updateOrderTotal/{{orderID}}" 
+            class="button"
+            style="
+            display: inline-block; 
+            padding: 15px 25px; 
+            font-size: 18px; 
+            color: white; 
+            background-color: #FF6F61; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+            transition: transform 0.2s, background-color 0.3s;
+            position: absolute; 
+            top: 10px; 
+            right: 10px;">
+            ! UPDATE ORDER TOTAL TO MATCH LINE ITEMS !
+    </a>
+    </header>
+    <main>
+        {% if data %}   
+
+        <table>
+            <tr>
+                {% for key in data[0].keys()%}
+                <th>{{key}}</th>
+                {% endfor %}
+                <th>Actions</th>
+            </tr>
+            {% for line_item in data %}
+            <tr>
+                
+                {% for key in line_item %}
+                <td>{{line_item[key]}}</td>
+                {% endfor %}
+                <td class="actions">
+                    <a href="/edit_line_item/{{orderID}}/{{line_item.lineitemID}}">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+
+        </table>
+        {% endif %}
+        <p>Order Total: ${{orderData[0].total}}</p>
+        
+
+        <div class = "add-button-container">
+            <a href="/listProducts_addToOrder/{{orderID}}" class="add-button"
+                style="display: inline-block; padding: 15px 25px; font-size: 18px; color: white; background-color: #4CAF50; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); transition: transform 0.2s, background-color 0.3s;">
+                + ADD LINE ITEM TO ORDER</a>
+
+    
+        </div>
+
+    </main>
+
+
+</body>
+</html>
