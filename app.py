@@ -663,6 +663,17 @@ def updateOrderTotal(orderID):
     # redirect to order
     return redirect("/viewOrderDetails/%s"%(orderID))
 
+# route to delete order 
+@app.route("/deleteOrder/<int:orderID>")
+def deleteOrder(orderID):
+    query = "delete from Orders where orderID = %s;" %(orderID)
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+
+    return redirect("/viewOrders")
+
+
 # route to edit line item of order
 @app.route("/edit_line_item/<int:orderID>/<int:itemID>", methods = ["POST", "GET"])
 def edit_line_item(orderID, itemID):
