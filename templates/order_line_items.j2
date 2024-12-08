@@ -11,7 +11,8 @@
     <header>
         <h1> OrderID:{{orderID}} </h1>
         <p>Order Placed: {{orderData[0].order_date}}</p>
-        <p>Order Status: {{orderData[0].shipped}}</p>
+        <p>Order Shipping Status: {{orderData[0].shipped}}</p>
+        <p>CustomerID:{{orderData[0].customerID}} - {{orderData[0].first_name}} {{orderData[0].last_name}}</p>
         <a href="/" class="back-button">Back to Main Page</a>
         <a href="/viewOrders" class="back-button"> Back to All Orders</a>
         <a href="/updateOrderTotal/{{orderID}}" 

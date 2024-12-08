@@ -335,7 +335,8 @@ def deleteSeller(id):
     return redirect("/sellers")
 
 
-#                       PRODUCT LISTINGS PAGES
+#                       PRODUCT PAGES
+# route show all products
 @app.route("/products", methods=["POST", "GET"])
 def products():
     if request.method == "GET":
@@ -351,6 +352,7 @@ def products():
         # render customer page paassing our query data to the customers template
         return render_template("products.html", data = data)
 
+# route to edit products
 @app.route("/editProduct/<int:id>", methods = ["POST", "GET"])
 def editProduct(id):
     if request.method == "GET":
@@ -446,10 +448,11 @@ def deleteProducts(id):
 
 
 #                           ORDERS PAGES
+# route to view all orders
 @app.route("/viewOrders", methods=["POST", "GET"])
 def viewOrders():
     if request.method == "GET":
-        # query to grab 
+        # query to grab orders
         query = """
                 select * 
                 from Orders; 
@@ -461,22 +464,31 @@ def viewOrders():
         # render 
         return render_template("viewOrders.j2", data = data)
 
+# route to view specific order's line items and details
 @app.route("/viewOrderDetails/<int:orderID>")
 def viewOrderDetails(orderID):
-    # view line items
     if request.method == "GET":
         
         # query to get order data
         query = """
-                select * 
-                from Orders
+                select 
+                    orderID,
+                    Orders.customerID,
+                    first_name,
+                    last_name,
+                    order_date,
+                    shipped,
+                    total
+                from Orders inner join Customers 
+                on Orders.customerID = Customers.customerID
                 where orderID = %s; 
                 """ %(orderID)
+        
         cursor = mysql.connection.cursor()
         cursor.execute(query)
         orderData = cursor.fetchall()
 
-        # query to get line item data HERE!!!!
+        # query to get line item data
         query2 = """
                 select lineitemID, Orders.orderID, store_name, Line_Items.productID, sell_price, qty 
                 from Orders inner join Line_Items on Orders.orderID = Line_Items.orderID
@@ -492,11 +504,12 @@ def viewOrderDetails(orderID):
 
         return render_template("order_line_items.j2", data = data, orderID = orderID, orderData = orderData)
 
+# route used to edit order total, order status, order date only (not line items)
 @app.route("/editOrder/<int:orderID>", methods = ["POST", "GET"])
 def editOrder(orderID):
-    # used to edit order total, order status, order date only 
+    
     if request.method == "GET":
-        # 
+        # get specific order data
         query = "select * from Orders where orderID = %s" %(orderID)
         cursor = mysql.connection.cursor()
         cursor.execute(query)
@@ -519,7 +532,7 @@ def editOrder(orderID):
                     total  = %s
                     where orderID = %s;
                     """
-            # submit and commit query
+            # submit and commit query to update specific order's details
             cursor = mysql.connection.cursor()
             cursor.execute(query, (order_date, order_status, order_total, orderID))
             mysql.connection.commit()
@@ -527,6 +540,7 @@ def editOrder(orderID):
             # once edit is made, go to 
             return redirect("/viewOrders")
 
+# this is to first select a customer to CREATE a new order
 @app.route("/customerSelection")
 def CustomerSelection():
     if request.method == "GET":
@@ -537,6 +551,7 @@ def CustomerSelection():
         data = cursor.fetchall()
     return render_template("customer_select_create_order.j2", data = data)
 
+# this creates a Blank Order - once blank order is created, we can add line items and edit its data
 @app.route("/createBlankOrder/<int:customerID>/", methods = ["POST", "GET"])
 def createBlankOrder(customerID):
 
@@ -546,6 +561,7 @@ def createBlankOrder(customerID):
     # Format the date as YYYY-MM-DD
     format_date = today.strftime('%Y-%m-%d')
 
+    # query to create blank order
     query = """
             insert into Orders (customerID, order_date, shipped, total)
             values (%s, '%s', 0, 0)
@@ -560,51 +576,15 @@ def createBlankOrder(customerID):
     cursor = mysql.connection.cursor()
     cursor.execute(query2)
     orderID = cursor.fetchall()[0]['LAST_INSERT_ID()']
-
+    
+    # redirect to view all orders
     return redirect("/viewOrderDetails/%s"%(orderID))
 
-    
-    
-
-
-@app.route("/edit_line_item/<int:orderID>/<int:itemID>", methods = ["POST", "GET"])
-def edit_line_item(orderID, itemID):
-    if request.method == "GET":
-        # 
-        query = "select * from Line_Items where orderID = %s and lineitemID = %s" %(orderID, itemID)
-        cursor = mysql.connection.cursor()
-        cursor.execute(query)
-        data = cursor.fetchall()
-
-        return render_template("edit_line_item.j2", orderID = orderID, data = data)
-    
-    if request.method == "POST":
-        if request.form.get("edit_line_item"):
-            # get user form inputs
-            line_item_sell_price = request.form["line_item_sell_price"]
-            line_item_qty        = request.form["line_item_qty"]
-
-
-            # build query
-            query = """
-                    update Line_Items set
-                    sell_price   = %s, 
-                    qty = %s
-                    where lineitemID = %s;
-                    """
-            # submit and commit query
-            cursor = mysql.connection.cursor()
-            cursor.execute(query, (line_item_sell_price, line_item_qty, itemID))
-            mysql.connection.commit()
-
-            # once edit is made, go to 
-            return redirect("/viewOrderDetails/%s" %(orderID))
-
+# this is list all product (not already in order) so that user can select product to add to order
 @app.route("/listProducts_addToOrder/<int:orderID>", methods = ["POST", "GET"])
 def list_products(orderID):
     if request.method == "GET":
-        # query to grab all customers in db. 
-        # To-Do: write the cury so that customers already in the crm are excluded
+        # query to grab all products not already in order
         query = """
                 SELECT 
                     Products.productID, 
@@ -627,10 +607,10 @@ def list_products(orderID):
         cursor.execute(query)
         data = cursor.fetchall()
 
-        # render customer page paassing our query data to the customers template
+        # render list of products to add to order
         return render_template("list_products_add_to_order.j2", data = data, orderID = orderID)
 
-
+# this sends the command to add product to order once user hits the submit button to do so
 @app.route("/addProductToOrder/<int:orderID>/<int:productID>")
 def addProductToOrder(orderID, productID):
     query = """
@@ -642,10 +622,14 @@ def addProductToOrder(orderID, productID):
     cursor.execute(query)
     mysql.connection.commit()
 
+    # redirect to view order details
     return redirect("/viewOrderDetails/%s"%(orderID))
 
+# once line items are added to order, we need to update the order total 
+# we can do it, manually or press a button to do so
 @app.route("/updateOrderTotal/<int:orderID>")
 def updateOrderTotal(orderID):
+    # build query to get all order line_items
     query = """
             select lineitemID, sell_price, qty 
             from Line_Items 
@@ -657,7 +641,7 @@ def updateOrderTotal(orderID):
     cursor.execute(query)
     data = cursor.fetchall()
 
-    # calculate total
+    # calculate total, iterate through line items
     new_total = 0
     sales_tax_rate = 8.1/100
     if data:
@@ -665,7 +649,7 @@ def updateOrderTotal(orderID):
             new_total += float(item['sell_price']) * float(item['qty'])
         new_total = new_total * (1+sales_tax_rate)
     
-    # update total
+    # query to update total
     query2 = """
                 update Orders 
                 set total  = %s
@@ -676,24 +660,45 @@ def updateOrderTotal(orderID):
     cursor.execute(query2)
     mysql.connection.commit()
 
+    # redirect to order
     return redirect("/viewOrderDetails/%s"%(orderID))
 
-@app.route("/orders")
-def orders():
-    return render_template("orders.html")
+# route to edit line item of order
+@app.route("/edit_line_item/<int:orderID>/<int:itemID>", methods = ["POST", "GET"])
+def edit_line_item(orderID, itemID):
+    if request.method == "GET":
+        # get line_item data
+        query = "select * from Line_Items where orderID = %s and lineitemID = %s" %(orderID, itemID)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
 
-@app.route("/editorder")
-def editorder():
-    return render_template("editorder.html")
+        return render_template("edit_line_item.j2", orderID = orderID, data = data)
+    
+    if request.method == "POST":
+        if request.form.get("edit_line_item"):
+            # get user form inputs
+            line_item_sell_price = request.form["line_item_sell_price"]
+            line_item_qty        = request.form["line_item_qty"]
 
-# LINE ITEMS PAGES
-@app.route("/lineitems")
-def lineitems():
-    return render_template("lineitems.html")
 
-@app.route("/editlineitems")
-def editlineitems():
-    return render_template("editlineitems.html")
+            # build query to update line item data with inputs from user
+            query = """
+                    update Line_Items set
+                    sell_price   = %s, 
+                    qty = %s
+                    where lineitemID = %s;
+                    """
+            # submit and commit query
+            cursor = mysql.connection.cursor()
+            cursor.execute(query, (line_item_sell_price, line_item_qty, itemID))
+            mysql.connection.commit()
+
+            # once edit is made, go back to Order details
+            return redirect("/viewOrderDetails/%s" %(orderID))
+
+
+
 
 
 # Listener
