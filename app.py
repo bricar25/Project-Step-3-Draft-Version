@@ -709,7 +709,15 @@ def edit_line_item(orderID, itemID):
             return redirect("/viewOrderDetails/%s" %(orderID))
 
 
+# route to delete line_item
+@app.route("/delete_line_item/<int:orderID>/<int:itemID>")
+def delete_line_item(orderID, itemID):
+    query = "delete from Line_Items where lineitemID = %s;" %(itemID)
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
 
+    return redirect("/viewOrderDetails/%s" %(orderID))
 
 
 # Listener
