@@ -404,40 +404,52 @@ def editProduct(id):
             # once edit is made, go to customers page
             return redirect("/products")
 
-# addProducts route
-# ***** Products [C]RUD *****
-@app.route("/addProducts", methods = ["POST", "GET"])
-def addProducts():
+
+# route for addProducts page
+@app.route("/addProduct", methods=["POST", "GET"])
+def addProduct():
     if request.method == "GET":
-        return render_template("addProducts.j2")
+        # Fetch all sellers for the dropdown
+        query = "SELECT sellerID, store_name FROM Sellers;"
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        sellers = cursor.fetchall()
+        return render_template("addProducts.j2", sellers=sellers)
     
     if request.method == "POST":
-        if request.form.get("add_products"):
-            # get user form inputs
-            productID = request.form["productID"]
-            sellerID = request.form["sellerID"]
+        if request.form.get("add_product"):
+            seller_id = request.form["seller_id"]
             category = request.form["category"]
             brand = request.form["brand"]
+            size = request.form["size"]
             price = request.form["price"]
             product_condition = request.form["product_condition"]
             color = request.form["color"]
 
-            # build query
-            query = """
-                    insert into Products (productID, sellerID, category, brand, price, product_condition, color)
-                    values (%s, %s, %s, %s, %s, %s, %s);
-                    """
-            # submit and commit query
+            # Validate the sellerID
+            validate_query = "SELECT COUNT(*) AS count FROM Sellers WHERE sellerID = %s;"
             cursor = mysql.connection.cursor()
-            cursor.execute(query, (productID, sellerID, category, brand, price, product_condition, color))
-            mysql.connection.commit()
+            cursor.execute(validate_query, (seller_id,))
+            result = cursor.fetchone()
+            
+            if result["count"] == 0:
+                # Return an error message if the sellerID is invalid
+                return "Error: The sellerID does not exist. Please select a valid seller.", 400
 
-            # once edit is made, go to customers page
+            # Insert the product if the sellerID is valid
+            query = """
+                    INSERT INTO Products (sellerID, category, brand, size, price, product_condition, color)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s);
+                    """
+            cursor.execute(query, (seller_id, category, brand, size, price, product_condition, color))
+            mysql.connection.commit()
             return redirect("/products")
+
+
 
 # delete products
 # ***** PRODUCTS'S CRU[D] *****
-@app.route("/deleteProducts/<int:id>")
+@app.route("/deleteProduct/<int:id>")
 def deleteProducts(id):
     query = "delete from Products where productID = %s;" %(id)
     cursor = mysql.connection.cursor()

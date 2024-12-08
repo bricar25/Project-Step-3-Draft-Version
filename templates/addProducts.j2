@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Add Product</h1>
+    </header>
+
+    <main>
+        <form id="add_product" action="/addProduct" method="POST">
+            <label for="seller_id">Seller</label>
+            <select id="seller_id" name="seller_id" required>
+                <option value="" disabled selected>Select a seller</option>
+                {% for seller in sellers %}
+                <option value="{{ seller.sellerID }}">{{ seller.store_name }} (ID: {{ seller.sellerID }})</option>
+                {% endfor %}
+            </select>
+
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" required>
+
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" required>
+
+            <label for="size">Size</label>
+            <select id="size" name="size" required>
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+            </select>
+
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+
+            <label for="product_condition">Condition</label>
+            <select id="product_condition" name="product_condition" required>
+                <option value="New">New</option>
+                <option value="Used">Used</option>
+            </select>
+
+            <label for="color">Color</label>
+            <input type="text" id="color" name="color" required>
+
+            <button type="submit" value="add_product" name="add_product">Add Product</button>
+            <button type="button" class="cancel" onclick="window.location.href='/products';">Cancel</button>
+        </form>
+    </main>
+</body>
+</html>

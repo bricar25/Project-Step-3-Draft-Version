@@ -55,46 +55,41 @@
 
         <!-- Adding edit links for each product -->
         <table>
-            <tr>
-                <th>Product ID</th>
-                <th>Seller ID</th>
-                <th>Category</th>
-                <th>Brand</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Condition</th>
-                <th>Color</th>
-                <th>Actions</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>Shirts</td>
-                <td>Adidas</td>
-                <td>Medium</td>
-                <td>$119.99</td>
-                <td>New</td>
-                <td>Black</td>
-                <td class="actions">
-                    <a href="updateproduct.html?productID=1">Edit</a>
-                    <a href="#delete">Delete</a>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>2</td>
-                <td>Pants</td>
-                <td>Nike</td>
-                <td>Large</td>
-                <td>$49.99</td>
-                <td>New</td>
-                <td>Red</td>
-                <td class="actions">
-                    <a href="updateproduct.html?productID=2">Edit</a>
-                    <a href="#delete">Delete</a>
-                </td>
-            </tr>
-            <!-- Repeat for each product -->
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Seller ID</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Condition</th>
+                    <th>Color</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in data %}
+                <tr>
+                    <td>{{ product.productID }}</td>
+                    <td>{{ product.sellerID }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.brand }}</td>
+                    <td>{{ product.size }}</td>
+                    <td>${{ product.price }}</td>
+                    <td>{{ product.condition }}</td>
+                    <td>{{ product.color }}</td>
+                    <td class="actions">
+                        <!-- Edit Button -->
+                        <a href="/editProduct/{{ product.productID }}">Edit</a>
+                        <!-- Delete Button -->
+                        <form action="/deleteProducts/{{ product.productID }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </main>
 </body>
